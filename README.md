@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+Personal portfolio site — dark theme with gold accents, built as a static export.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router) with Turbopack
+- React 19 + TypeScript
+- Tailwind CSS v4
+- Framer Motion for scroll and entrance animations
+- EmailJS for the contact form
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site runs at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+`output: "export"` in [next.config.ts](next.config.ts) writes a fully static site to `out/`,
+so it can be hosted on GitHub Pages, Vercel, Netlify, or any CDN without a Node server.
 
-To learn more about Next.js, take a look at the following resources:
+## Configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Content lives in [data/](data/) — edit these instead of touching components:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| File | Contents |
+| --- | --- |
+| `profile.ts` | Name, role, bio, stats, social links |
+| `skills.ts` | Skill categories with levels, orbit labels |
+| `projects.ts` | Project cards |
+| `experience.ts` | Work history timeline |
+| `education.ts` | Education timeline |
 
-## Deploy on Vercel
+### Contact form
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Copy `.env.example` to `.env.local` and fill in your EmailJS credentials:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=
+```
+
+Without them the form falls back to opening the visitor's mail client via `mailto:`.
+
+### Assets
+
+Place `avatar.jpg` and `cv.pdf` in `public/`. If the avatar is missing,
+the hero renders the initials instead.
