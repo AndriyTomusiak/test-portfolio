@@ -5,6 +5,7 @@ import { Download, ArrowRight, MapPin } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { Counter } from "@/components/ui/Counter";
 import { Avatar } from "@/components/ui/Avatar";
+import { AnimatedText } from "@/components/ui/AnimatedText";
 import { profile } from "@/data/profile";
 
 const fadeUp = {
@@ -59,13 +60,14 @@ export function Hero() {
             Hello, I&apos;m
           </motion.p>
 
-          <motion.h1
-            variants={fadeUp}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-3 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
-          >
-            {profile.name}
-          </motion.h1>
+          <AnimatedText
+            as="h1"
+            text={profile.name}
+            trigger="mount"
+            delay={0.35}
+            stagger={0.04}
+            className="mt-3 block font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
+          />
 
           <motion.p
             variants={fadeUp}

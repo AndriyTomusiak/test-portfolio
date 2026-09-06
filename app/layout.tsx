@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { GlowCursor } from "@/components/ui/GlowCursor";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col bg-bg text-text">
         <ScrollProgress />
+        <GlowCursor />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

@@ -1,4 +1,6 @@
 import { Reveal } from "./Reveal";
+import { AnimatedText } from "./AnimatedText";
+import { GlowDivider } from "./GlowDivider";
 
 type Props = {
   /** Large faded word rendered behind the title. */
@@ -17,15 +19,14 @@ export function SectionHeading({ watermark, title, subtitle }: Props) {
         {watermark}
       </span>
 
-      <h2 className="relative font-display text-4xl font-bold tracking-tight sm:text-5xl">
-        {title}
-      </h2>
+      <AnimatedText
+        as="h2"
+        text={title}
+        trigger="inView"
+        className="relative block font-display text-4xl font-bold tracking-tight sm:text-5xl"
+      />
 
-      <div className="relative mx-auto mt-5 flex items-center justify-center gap-3">
-        <span className="h-px w-12 bg-gradient-to-r from-transparent to-gold/60" />
-        <span className="size-1.5 rounded-full bg-gold" />
-        <span className="h-px w-12 bg-gradient-to-l from-transparent to-gold/60" />
-      </div>
+      <GlowDivider className="relative mt-5" />
 
       {subtitle && (
         <p className="relative mt-4 text-sm uppercase tracking-[0.25em] text-text-subtle">
