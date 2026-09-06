@@ -6,6 +6,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Counter } from "@/components/ui/Counter";
 import { Avatar } from "@/components/ui/Avatar";
 import { AnimatedText } from "@/components/ui/AnimatedText";
+import { useIntroDone } from "@/components/ui/PageLoader";
 import { profile } from "@/data/profile";
 
 const fadeUp = {
@@ -14,6 +15,11 @@ const fadeUp = {
 };
 
 export function Hero() {
+  // The loader covers the hero, so the entrance waits for it to lift instead of
+  // playing out of sight behind the overlay.
+  const introDone = useIntroDone();
+  const stage = introDone ? "visible" : "hidden";
+
   return (
     <section
       id="home"
@@ -28,7 +34,7 @@ export function Hero() {
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[1.15fr_1fr]">
         <motion.div
           initial="hidden"
-          animate="visible"
+          animate={stage}
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
           <motion.div
@@ -64,8 +70,10 @@ export function Hero() {
             as="h1"
             text={profile.name}
             trigger="mount"
+            play={introDone}
+            variant="mask"
             delay={0.35}
-            stagger={0.04}
+            stagger={0.045}
             className="mt-3 block font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
           />
 
@@ -102,8 +110,12 @@ export function Hero() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial="hidden"
+          animate={stage}
+          variants={{
+            hidden: { opacity: 0, scale: 0.92 },
+            visible: { opacity: 1, scale: 1 },
+          }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="relative mx-auto w-full max-w-sm lg:mx-0"
         >
@@ -126,8 +138,12 @@ export function Hero() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial="hidden"
+        animate={stage}
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0 },
+        }}
         transition={{ delay: 0.8, duration: 0.6 }}
         className="relative mx-auto mt-16 w-full max-w-6xl px-6"
       >

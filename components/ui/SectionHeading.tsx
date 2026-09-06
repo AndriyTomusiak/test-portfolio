@@ -23,6 +23,7 @@ export function SectionHeading({ watermark, title, subtitle }: Props) {
         as="h2"
         text={title}
         trigger="inView"
+        variant="mask"
         className="relative block font-display text-4xl font-bold tracking-tight sm:text-5xl"
       />
 

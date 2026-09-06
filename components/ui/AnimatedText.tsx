@@ -7,24 +7,49 @@ type Props = {
   className?: string;
   /** `mount` animates immediately, `inView` waits until scrolled into view. */
   trigger?: "mount" | "inView";
+  /** Holds a `mount` animation back until true — used to wait out the loader. */
+  play?: boolean;
+  /**
+   * `fade` drifts each character up out of a blur.
+   * `mask` slides it out from behind a clipping box for a sharper reveal.
+   */
+  variant?: "fade" | "mask";
   /** Seconds between each character. */
   stagger?: number;
   delay?: number;
   as?: "h1" | "h2" | "h3" | "p" | "span";
 };
 
+/**
+ * The clip box has to be taller than the line box, otherwise `overflow: hidden`
+ * shaves the ascenders and descenders off the glyphs it is meant to reveal.
+ * Negative margins keep the extra space from affecting layout.
+ */
+const CLIP_TOP = "0.12em";
+const CLIP_BOTTOM = "0.22em";
+
 const container = (stagger: number, delay: number): Variants => ({
   hidden: {},
   visible: { transition: { staggerChildren: stagger, delayChildren: delay } },
 });
 
-const character: Variants = {
-  hidden: { opacity: 0, y: "0.35em", filter: "blur(6px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+const characterVariants: Record<NonNullable<Props["variant"]>, Variants> = {
+  fade: {
+    hidden: { opacity: 0, y: "0.35em", filter: "blur(6px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+  mask: {
+    // Past 100% to clear the padding added to the clip box below.
+    hidden: { y: "130%" },
+    visible: {
+      y: "0%",
+      transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
+    },
   },
 };
 
@@ -37,6 +62,8 @@ export function AnimatedText({
   text,
   className,
   trigger = "inView",
+  play = true,
+  variant = "fade",
   stagger = 0.03,
   delay = 0,
   as = "span",
@@ -51,11 +78,21 @@ export function AnimatedText({
 
   const animationProps =
     trigger === "mount"
-      ? { animate: "visible" as const }
+      ? { animate: play ? ("visible" as const) : ("hidden" as const) }
       : {
           whileInView: "visible" as const,
           viewport: { once: true, margin: "-80px" },
         };
+
+  const clipStyle =
+    variant === "mask"
+      ? {
+          paddingTop: CLIP_TOP,
+          marginTop: `-${CLIP_TOP}`,
+          paddingBottom: CLIP_BOTTOM,
+          marginBottom: `-${CLIP_BOTTOM}`,
+        }
+      : undefined;
 
   return (
     <MotionTag
@@ -70,14 +107,23 @@ export function AnimatedText({
       {text.split(" ").map((word, wordIndex, words) => (
         <span key={wordIndex} className="inline-block whitespace-nowrap">
           {[...word].map((char, charIndex) => (
-            <motion.span
+            <span
               key={charIndex}
               aria-hidden
-              className="inline-block"
-              variants={character}
+              className={
+                variant === "mask"
+                  ? "inline-block overflow-hidden"
+                  : "inline-block"
+              }
+              style={clipStyle}
             >
-              {char}
-            </motion.span>
+              <motion.span
+                className="inline-block"
+                variants={characterVariants[variant]}
+              >
+                {char}
+              </motion.span>
+            </span>
           ))}
           {wordIndex < words.length - 1 && (
             <span aria-hidden className="inline-block">
