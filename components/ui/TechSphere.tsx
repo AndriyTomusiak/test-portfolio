@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { IconType } from "react-icons";
@@ -134,6 +134,78 @@ function ringSphere(count: number, radius: number) {
   });
 }
 
+function Starfield() {
+  const points = useRef<THREE.Points>(null);
+  const geometry = useRef<THREE.BufferGeometry>(null);
+  const elapsed = useRef(0);
+
+  const { positions, colors, phases, speeds, drift } = useMemo(() => {
+    const count = 700;
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const phases = new Float32Array(count);
+    const speeds = new Float32Array(count);
+    const drift = new Float32Array(count);
+
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (Math.random() * 2 - 1) * SPREAD_X;
+      positions[i * 3 + 1] = (Math.random() * 2 - 1) * 9;
+      positions[i * 3 + 2] = -(2 + Math.random() * 8);
+      phases[i] = Math.random() * Math.PI * 2;
+      speeds[i] = 0.5 + Math.random() * 2;
+      drift[i] = 0.08 + Math.random() * 0.3;
+    }
+
+    return { positions, colors, phases, speeds, drift };
+  }, []);
+
+  useFrame((_, delta) => {
+    const step = Math.min(delta, 0.05);
+    elapsed.current += step;
+    const time = elapsed.current;
+
+    for (let i = 0; i < phases.length; i++) {
+      let x = positions[i * 3] + drift[i] * step;
+      if (x > SPREAD_X) x = -SPREAD_X;
+      positions[i * 3] = x;
+
+      const wave = Math.sin(time * speeds[i] + phases[i]);
+      const pulse = wave * wave;
+      const brightness = 0.12 + 0.88 * pulse * pulse;
+      colors[i * 3] = brightness;
+      colors[i * 3 + 1] = brightness;
+      colors[i * 3 + 2] = brightness;
+    }
+
+    const attr = geometry.current;
+    if (attr) {
+      attr.getAttribute("position").needsUpdate = true;
+      attr.getAttribute("color").needsUpdate = true;
+    }
+
+    if (points.current) {
+      points.current.position.y = Math.cos(time * 0.05) * 0.5;
+    }
+  });
+
+  return (
+    <points ref={points}>
+      <bufferGeometry ref={geometry}>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.11}
+        sizeAttenuation
+        vertexColors
+        transparent
+        opacity={0.85}
+        depthWrite={false}
+      />
+    </points>
+  );
+}
+
 function GlobeGrid() {
   const geometries = useMemo(() => {
     const segments = 96;
@@ -181,87 +253,6 @@ function GlobeGrid() {
   );
 }
 
-/**
- * Backdrop of stars, spread wide enough to fill the full-bleed canvas on any
- * aspect ratio. Kept behind the globe so stars never land on top of an icon.
- */
-function Starfield() {
-  const points = useRef<THREE.Points>(null);
-  const geometry = useRef<THREE.BufferGeometry>(null);
-  const elapsed = useRef(0);
-
-  const { positions, colors, phases, speeds, drift } = useMemo(() => {
-    const count = 700;
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    const phases = new Float32Array(count);
-    const speeds = new Float32Array(count);
-    const drift = new Float32Array(count);
-
-    for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() * 2 - 1) * SPREAD_X;
-      positions[i * 3 + 1] = (Math.random() * 2 - 1) * 9;
-      positions[i * 3 + 2] = -(2 + Math.random() * 8);
-
-      phases[i] = Math.random() * Math.PI * 2;
-      speeds[i] = 0.5 + Math.random() * 2;
-      drift[i] = 0.08 + Math.random() * 0.3;
-    }
-
-    return { positions, colors, phases, speeds, drift };
-  }, []);
-
-  useFrame((_, delta) => {
-    const step = Math.min(delta, 0.05);
-    elapsed.current += step;
-    const time = elapsed.current;
-
-    for (let i = 0; i < phases.length; i++) {
-      // Each star drifts sideways at its own pace and wraps around, which reads
-      // as slow parallax across the field.
-      let x = positions[i * 3] + drift[i] * step;
-      if (x > SPREAD_X) x = -SPREAD_X;
-      positions[i * 3] = x;
-
-      // PointsMaterial has no per-point opacity, so the twinkle rides on each
-      // star's vertex colour. The fourth power sharpens it into a blink.
-      const wave = Math.sin(time * speeds[i] + phases[i]);
-      const pulse = wave * wave;
-      const brightness = 0.12 + 0.88 * pulse * pulse;
-
-      colors[i * 3] = 0.831 * brightness;
-      colors[i * 3 + 1] = 0.686 * brightness;
-      colors[i * 3 + 2] = 0.216 * brightness;
-    }
-
-    const attributes = geometry.current;
-    if (attributes) {
-      attributes.getAttribute("position").needsUpdate = true;
-      attributes.getAttribute("color").needsUpdate = true;
-    }
-
-    if (points.current) {
-      points.current.position.y = Math.cos(time * 0.05) * 0.5;
-    }
-  });
-
-  return (
-    <points ref={points}>
-      <bufferGeometry ref={geometry}>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.11}
-        sizeAttenuation
-        vertexColors
-        transparent
-        opacity={0.8}
-        depthWrite={false}
-      />
-    </points>
-  );
-}
 
 function TechNode({
   item,
@@ -274,6 +265,11 @@ function TechNode({
   const element = useRef<HTMLDivElement>(null);
   const worldPosition = useMemo(() => new THREE.Vector3(), []);
   const Icon = iconComponents[item.icon];
+  // On small screens the canvas is shorter, so Three.js projects fewer pixels
+  // per world unit — icons shrink. We invert this: smaller canvas → higher scale
+  // so mobile icons stay large and readable. Desktop is capped at 0.34.
+  const { size } = useThree();
+  const iconScale = Math.max(0.34, Math.min(0.62, (0.34 * 950) / size.height));
 
   // Icons are DOM nodes, so WebGL depth does not apply to them. Fading and
   // shrinking the ones on the far side of the sphere restores the illusion.
@@ -289,7 +285,7 @@ function TechNode({
 
   return (
     <group ref={anchor} position={position}>
-      <Html transform sprite scale={0.34} zIndexRange={[20, 0]}>
+      <Html transform sprite scale={iconScale} zIndexRange={[20, 0]}>
         <div
           ref={element}
           className="flex w-28 flex-col items-center gap-1.5 select-none"
@@ -401,13 +397,8 @@ export function TechSphere({ items }: { items: TechOrbitItem[] }) {
         lastPointer.current = null;
       }}
     >
-      <div
-        aria-hidden
-        className="absolute top-1/2 left-1/2 aspect-square h-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-3xl"
-      />
-
       <Canvas
-        camera={{ position: [0, 0, 9.4], fov: 45 }}
+        camera={{ position: [1.8, 0, 9.4], fov: 45 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
       >
