@@ -7,30 +7,30 @@ export const skillCategories: SkillCategory[] = [
   {
     title: "Frontend",
     items: [
-      { name: "Angular", level: 95 },
-      { name: "React", level: 88 },
+      { name: "React / Next.js", level: 95 },
       { name: "TypeScript", level: 94 },
-      { name: "Next.js", level: 82 },
+      { name: "Angular", level: 88 },
+      { name: "Vue.js", level: 82 },
       { name: "Tailwind CSS", level: 90 },
-      { name: "RxJS", level: 85 },
     ],
   },
   {
-    title: "Backend",
+    title: "Backend & AI",
     items: [
-      { name: ".NET / C#", level: 92 },
-      { name: "Node.js", level: 80 },
-      { name: "EF Core", level: 88 },
-      { name: "REST APIs", level: 93 },
+      { name: "C# / .NET", level: 96 },
+      { name: "Node.js", level: 88 },
+      { name: "Python", level: 85 },
+      { name: "Azure OpenAI / RAG", level: 87 },
+      { name: "REST APIs / GraphQL", level: 93 },
     ],
   },
   {
-    title: "Data & Infrastructure",
+    title: "Cloud & Data",
     items: [
-      { name: "PostgreSQL", level: 89 },
-      { name: "Docker", level: 78 },
-      { name: "Nx Monorepo", level: 86 },
-      { name: "Git / CI", level: 90 },
+      { name: "Azure", level: 90 },
+      { name: "Microsoft Graph / 365", level: 88 },
+      { name: "SQL Server / PostgreSQL", level: 89 },
+      { name: "Docker / CI-CD", level: 84 },
     ],
   },
 ];
@@ -39,28 +39,28 @@ export const skillCategories: SkillCategory[] = [
 export type TechIcon =
   | "typescript"
   | "javascript"
-  | "angular"
+  | "python"
+  | "csharp"
   | "react"
   | "nextjs"
-  | "rxjs"
-  | "ngrx"
+  | "angular"
+  | "vue"
+  | "nodejs"
+  | "dotnet"
+  | "azure"
+  | "openai"
+  | "graphql"
+  | "docker"
+  | "postgresql"
+  | "mysql"
+  | "git"
+  | "githubactions"
+  | "tailwind"
   | "html"
   | "css"
-  | "tailwind"
-  | "dotnet"
-  | "csharp"
-  | "nodejs"
-  | "express"
-  | "swagger"
-  | "postgresql"
-  | "mongodb"
-  | "redis"
-  | "docker"
-  | "githubactions"
-  | "git"
-  | "nx"
-  | "jest"
-  | "figma";
+  | "php"
+  | "figma"
+  | "aws";
 
 export type TechOrbitItem = {
   name: string;
@@ -73,26 +73,26 @@ export type TechOrbitItem = {
 export const techOrbit: TechOrbitItem[] = [
   { name: "TypeScript", icon: "typescript", color: "#3178c6" },
   { name: "JavaScript", icon: "javascript", color: "#f7df1e" },
-  { name: "Angular", icon: "angular", color: "#dd0031" },
+  { name: "Python", icon: "python", color: "#3776ab" },
+  { name: "C#", icon: "csharp", color: "#a179dc" },
   { name: "React", icon: "react", color: "#61dafb" },
   { name: "Next.js", icon: "nextjs", color: "#ffffff" },
-  { name: "RxJS", icon: "rxjs", color: "#b7178c" },
-  { name: "NgRx", icon: "ngrx", color: "#ba2bd2" },
+  { name: "Angular", icon: "angular", color: "#dd0031" },
+  { name: "Vue.js", icon: "vue", color: "#42b883" },
+  { name: "Node.js", icon: "nodejs", color: "#5fa04e" },
+  { name: ".NET", icon: "dotnet", color: "#8b6cf0" },
+  { name: "Azure", icon: "azure", color: "#0089d6" },
+  { name: "Azure OpenAI", icon: "openai", color: "#10a37f" },
+  { name: "GraphQL", icon: "graphql", color: "#e10098" },
+  { name: "Docker", icon: "docker", color: "#2496ed" },
+  { name: "PostgreSQL", icon: "postgresql", color: "#5b7ee8" },
+  { name: "MySQL", icon: "mysql", color: "#4479a1" },
+  { name: "Git", icon: "git", color: "#f05033" },
+  { name: "GitHub Actions", icon: "githubactions", color: "#2088ff" },
+  { name: "Tailwind", icon: "tailwind", color: "#38bdf8" },
   { name: "HTML5", icon: "html", color: "#e34f26" },
   { name: "CSS", icon: "css", color: "#8a5cf6" },
-  { name: "Tailwind", icon: "tailwind", color: "#38bdf8" },
-  { name: ".NET", icon: "dotnet", color: "#8b6cf0" },
-  { name: "C#", icon: "csharp", color: "#a179dc" },
-  { name: "Node.js", icon: "nodejs", color: "#5fa04e" },
-  { name: "Express", icon: "express", color: "#e5e5e5" },
-  { name: "Swagger", icon: "swagger", color: "#85ea2d" },
-  { name: "PostgreSQL", icon: "postgresql", color: "#5b7ee8" },
-  { name: "MongoDB", icon: "mongodb", color: "#47a248" },
-  { name: "Redis", icon: "redis", color: "#ff4438" },
-  { name: "Docker", icon: "docker", color: "#2496ed" },
-  { name: "GitHub Actions", icon: "githubactions", color: "#2088ff" },
-  { name: "Git", icon: "git", color: "#f05033" },
-  { name: "Nx", icon: "nx", color: "#7cb8f0" },
-  { name: "Jest", icon: "jest", color: "#c21325" },
+  { name: "PHP", icon: "php", color: "#777bb4" },
   { name: "Figma", icon: "figma", color: "#f24e1e" },
+  { name: "AWS", icon: "aws", color: "#ff9900" },
 ];

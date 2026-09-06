@@ -1,28 +1,28 @@
-import { Code2, Layers, ShieldCheck, Zap } from "lucide-react";
+import { Bot, Cloud, Layers, ShieldCheck } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { profile } from "@/data/profile";
 
 const traits = [
   {
-    icon: Layers,
-    title: "Full-Stack Ownership",
-    text: "Comfortable from schema migration to rendered component, without handing off at the API boundary.",
-  },
-  {
-    icon: Code2,
-    title: "Typed Contracts",
-    text: "Shared types between backend and frontend so refactors fail at compile time, not in production.",
+    icon: Bot,
+    title: "AI-First Development",
+    text: "Building AI applications with Azure OpenAI, RAG pipelines, AI agents, vector search, and prompt engineering — production-grade, not experimental.",
   },
   {
     icon: ShieldCheck,
-    title: "Role-Based Design",
-    text: "Multi-tenant systems with permission models enforced on both the API and the interface.",
+    title: "Microsoft Ecosystem",
+    text: "Deep experience with Microsoft 365, SharePoint, Microsoft Graph API, and Entra ID — integrating enterprise data into custom applications.",
   },
   {
-    icon: Zap,
-    title: "Maintainable Delivery",
-    text: "Explicit conventions and small reviewable changes over clever one-off solutions.",
+    icon: Layers,
+    title: "Full-Stack Ownership",
+    text: "Comfortable across the whole stack — from database schema to REST API to rendered component — without handing off at boundaries.",
+  },
+  {
+    icon: Cloud,
+    title: "Cloud & DevOps",
+    text: "Deploying on Azure, AWS, and GCP with Docker, CI/CD pipelines, application monitoring, and production release management.",
   },
 ];
 
@@ -45,7 +45,7 @@ export function About() {
             ))}
 
             <div className="flex flex-wrap gap-2 pt-2">
-              {["Angular", ".NET", "PostgreSQL", "TypeScript", "React"].map(
+              {["C# / .NET", "Azure OpenAI", "React", "TypeScript", "Python"].map(
                 (tag) => (
                   <span
                     key={tag}
