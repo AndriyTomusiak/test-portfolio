@@ -7,8 +7,6 @@ type Props = {
   className?: string;
   /** `mount` animates immediately, `inView` waits until scrolled into view. */
   trigger?: "mount" | "inView";
-  /** Holds a `mount` animation back until true — used to wait out the loader. */
-  play?: boolean;
   /**
    * `fade` drifts each character up out of a blur.
    * `mask` slides it out from behind a clipping box for a sharper reveal.
@@ -62,7 +60,6 @@ export function AnimatedText({
   text,
   className,
   trigger = "inView",
-  play = true,
   variant = "fade",
   stagger = 0.03,
   delay = 0,
@@ -78,7 +75,7 @@ export function AnimatedText({
 
   const animationProps =
     trigger === "mount"
-      ? { animate: play ? ("visible" as const) : ("hidden" as const) }
+      ? { animate: "visible" as const }
       : {
           whileInView: "visible" as const,
           viewport: { once: true, margin: "-80px" },

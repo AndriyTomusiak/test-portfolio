@@ -4,7 +4,6 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { GlowCursor } from "@/components/ui/GlowCursor";
-import { PageLoader } from "@/components/ui/PageLoader";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
@@ -37,13 +36,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-bg text-text">
-        <PageLoader>
-          <ScrollProgress />
-          <GlowCursor />
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </PageLoader>
+        <ScrollProgress />
+        <GlowCursor />
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
